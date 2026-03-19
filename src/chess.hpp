@@ -472,8 +472,10 @@ struct AttackTable {
     // Cache-aware layout: each square has a dense 4K entry attack table.
     alignas(64) std::array<std::array<Bitboard, 4096>, 64> attacks;
     std::array<Bitboard, 64> masks;
+#if !HAS_BMI2
     std::array<uint8_t, 64> relevant_bits;
     std::array<std::array<uint8_t, 12>, 64> bit_positions;
+#endif
 
     inline uint16_t index(Square square, Bitboard occupied) const {
         Bitboard mask = masks[square];
@@ -1022,7 +1024,11 @@ public:
 
     PieceType _remove_piece_at(Square square);
 
+    PieceType _remove_piece_at_known(Square square, PieceType piece_type, Color color);
+
     void _set_piece_at(Square square, PieceType piece_type, Color color);
+
+    void _set_piece_at_empty(Square square, PieceType piece_type, Color color);
 
     void _set_board_fen(std::string fen);
 

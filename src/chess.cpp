@@ -381,6 +381,7 @@ const AttackTable _attack_table(const std::vector<int>& deltas) {
         Bitboard mask = _sliding_attacks(square, BB_EMPTY, deltas) & ~_edges(square);
         table.masks[square] = mask;
 
+#if !HAS_BMI2
         uint8_t bit_count = 0;
         Bitboard temp = mask;
         while (temp) {
@@ -388,6 +389,7 @@ const AttackTable _attack_table(const std::vector<int>& deltas) {
             temp &= temp - 1;
         }
         table.relevant_bits[square] = bit_count;
+#endif
 
         std::vector<Bitboard> subsets;
         _carry_rippler(mask, subsets);
@@ -1496,12 +1498,20 @@ void Baseboard::_clear_board() {
 
 PieceType Baseboard::_remove_piece_at(Square square) {
     PieceType piece_type = piece_type_at(square);
-    
+
     if (piece_type == NULL_PIECE)
         return NULL_PIECE;
 
     Bitboard mask = BB_SQUARES[square];
     Color color = static_cast<bool>(occupied_co[WHITE] & mask);
+    return _remove_piece_at_known(square, piece_type, color);
+}
+
+PieceType Baseboard::_remove_piece_at_known(Square square, PieceType piece_type, Color color) {
+    if (piece_type == NULL_PIECE)
+        return NULL_PIECE;
+
+    Bitboard mask = BB_SQUARES[square];
     Square pst_square = color ? square_mirror(square) : square;
 
     if (piece_type == PAWN) {
@@ -1545,6 +1555,13 @@ PieceType Baseboard::_remove_piece_at(Square square) {
 void Baseboard::_set_piece_at(Square square, PieceType piece_type, Color color) {
     _remove_piece_at(square);
 
+    _set_piece_at_empty(square, piece_type, color);
+}
+
+void Baseboard::_set_piece_at_empty(Square square, PieceType piece_type, Color color) {
+    if (piece_type == NULL_PIECE)
+        return;
+
     Bitboard mask = BB_SQUARES[square];
 
     Square pst_square = color ? square_mirror(square) : square;
@@ -1577,8 +1594,9 @@ void Baseboard::_set_piece_at(Square square, PieceType piece_type, Color color) 
         this->kings |= mask;
         this->material_mg[color] += mg_pst[KING][pst_square];
         this->material_eg[color] += eg_pst[KING][pst_square];
-    } else
+    } else {
         return;
+    }
 
     this->occupied ^= mask;
     this->occupied_co[color] ^= mask;
@@ -2791,10 +2809,6 @@ void Board::push(const Move& move) {
         return;
     }
 
-    // Zero the half-move clock.
-    if (is_zeroing(move))
-        this->halfmove_clock = 0;
-
     // Normalize the move to Chess960.
     Square to_square = this->_is_to_chess960(move);
     if (to_square == NULL_SQUARE) {
@@ -2804,10 +2818,16 @@ void Board::push(const Move& move) {
     Bitboard from_bb = BB_SQUARES[move.from_square];
     Bitboard to_bb = BB_SQUARES[to_square];
 
-    PieceType piece_type = _remove_piece_at(move.from_square);
+    PieceType piece_type = piece_type_at(move.from_square);
+    PieceType captured_piece_type = piece_type_at(to_square);
+
+    // Zero the half-move clock for pawn moves and captures.
+    if (piece_type == PAWN || captured_piece_type != NULL_PIECE)
+        this->halfmove_clock = 0;
+
+    _remove_piece_at_known(move.from_square, piece_type, this->turn);
     /* if (piece_type == NULL_PIECE)
         throw std::invalid_argument("piece not found at source square"); */
-    PieceType captured_piece_type = piece_type_at(to_square);
 
     // Update castling rights.
     this->castling_rights &= ~to_bb & ~from_bb;
@@ -2829,7 +2849,7 @@ void Board::push(const Move& move) {
         else if (move.to_square == ep_square && (std::abs(diff) == 7 || std::abs(diff) == 9) && captured_piece_type == NULL_PIECE) {
             // Remove pawns captured en passant.
             int down = this->turn ? -8 : 8;
-            _remove_piece_at(ep_square + down);
+            _remove_piece_at_known(ep_square + down, PAWN, !this->turn);
         } 
     }
 
@@ -2843,21 +2863,23 @@ void Board::push(const Move& move) {
     if (castling) {
         bool a_side = square_file(to_square) < square_file(move.from_square);
 
-        this->_remove_piece_at(move.from_square);
-        this->_remove_piece_at(to_square);
+        this->_remove_piece_at_known(to_square, ROOK, this->turn);
 
         if (a_side) {
-            this->_set_piece_at(this->turn ? C1 : C8, KING, this->turn);
-            this->_set_piece_at(this->turn ? D1 : D8, ROOK, this->turn);
+            this->_set_piece_at_empty(this->turn ? C1 : C8, KING, this->turn);
+            this->_set_piece_at_empty(this->turn ? D1 : D8, ROOK, this->turn);
         } else {
-            this->_set_piece_at(this->turn ? G1 : G8, KING, this->turn);
-            this->_set_piece_at(this->turn ? F1 : F8, ROOK, this->turn);
+            this->_set_piece_at_empty(this->turn ? G1 : G8, KING, this->turn);
+            this->_set_piece_at_empty(this->turn ? F1 : F8, ROOK, this->turn);
         }
     }
 
     // Put the piece on the target square.
-    if (!castling)
-        _set_piece_at(move.to_square, piece_type, this->turn);
+    if (!castling) {
+        if (captured_piece_type != NULL_PIECE)
+            _remove_piece_at_known(move.to_square, captured_piece_type, !this->turn);
+        _set_piece_at_empty(move.to_square, piece_type, this->turn);
+    }
 
     // Swap turns.
     this->turn = !this->turn;
