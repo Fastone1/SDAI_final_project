@@ -1,0 +1,350 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  ms/call  ms/call  name    
+ 23.13      7.33     7.33                             _mcount_private
+ 14.45     11.91     4.58                             __fentry__
+ 14.23     16.42     4.51 793103521     0.00     0.00  Board::push(Move const&)
+ 12.40     20.35     3.93                             Baseboard::attackers_mask(bool, int, std::optional<unsigned long long> const&) const
+  8.39     23.01     2.66 29991447     0.00     0.00  Board::generate_legal_moves(StaticVector<Move, 216ull>&, unsigned long long const&, unsigned long long const&) const [clone .constprop.0]
+  7.70     25.45     2.44                             Baseboard::_remove_piece_at(int)
+  7.35     27.78     2.33                             Baseboard::_set_piece_at(int, int, bool)
+  6.12     29.72     1.94       46    42.17   198.04  perft(int, Board&) [clone .part.0]
+  4.83     31.25     1.53                             Baseboard::attacks_mask(int) const
+  1.04     31.58     0.33                             Board::_is_safe(int, unsigned long long const&, int, int) const
+  0.19     31.64     0.06                             Board::_ep_skewered(int, int) const
+  0.16     31.69     0.05                             Board::generate_pseudo_legal_moves(StaticVector<Move, 216ull>&, unsigned long long const&, unsigned long long const&) const
+  0.00     31.69     0.00 2414255860     0.00     0.00  std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::__cxx11::regex_traits<char> >, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::~_Sp_counted_ptr_inplace()
+  0.00     31.69     0.00 570422477     0.00     0.00  std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::__cxx11::regex_traits<char> >, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::_M_get_deleter(std::type_info const&)
+  0.00     31.69     0.00     2295     0.00     0.00  std::_Function_handler<bool (char), std::__detail::_CharMatcher<std::__cxx11::regex_traits<char>, false, false> >::_M_invoke(std::_Any_data const&, char&&)
+  0.00     31.69     0.00     2209     0.00     0.00  std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::push_back(char)
+  0.00     31.69     0.00      488     0.00     0.00  std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_assign(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+  0.00     31.69     0.00      427     0.00     0.00  std::__detail::_Compiler<std::__cxx11::regex_traits<char> >::_M_try_char()
+  0.00     31.69     0.00      244     0.00     0.00  bool std::operator==<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*)
+  0.00     31.69     0.00      183     0.00     0.00  std::__detail::_State<char>::~_State() [clone .part.0] [clone .lto_priv.0]
+  0.00     31.69     0.00      183     0.00     0.00  std::__detail::_Scanner<char>::_M_advance()
+  0.00     31.69     0.00      154     0.00     0.00  std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::__cxx11::regex_traits<char>, false, false> >::_M_invoke(std::_Any_data const&, char&&)
+  0.00     31.69     0.00      122     0.00     0.00  std::__detail::_StateSeq<std::__cxx11::regex_traits<char> >& std::deque<std::__detail::_StateSeq<std::__cxx11::regex_traits<char> >, std::allocator<std::__detail::_StateSeq<std::__cxx11::regex_traits<char> > > >::emplace_back<std::__detail::_StateSeq<std::__cxx11::regex_traits<char> > >(std::__detail::_StateSeq<std::__cxx11::regex_traits<char> >&&) [clone .isra.0]
+  0.00     31.69     0.00       65     0.00     0.00  __gcc_deregister_frame
+  0.00     31.69     0.00       62     0.00     0.00  void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<true>(char const*, unsigned long long)
+  0.00     31.69     0.00       61     0.00     0.00  Board::set_fen(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+  0.00     31.69     0.00       61     0.00     0.00  std::_Function_handler<bool (char), std::__detail::_CharMatcher<std::__cxx11::regex_traits<char>, false, false> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
+  0.00     31.69     0.00       61     0.00     0.00  std::__cxx11::basic_regex<char, std::__cxx11::regex_traits<char> >::_M_compile(char const*, char const*, std::regex_constants::syntax_option_type) [clone .constprop.0]
+  0.00     31.69     0.00       61     0.00     0.00  std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) [clone .isra.0]
+  0.00     31.69     0.00       61     0.00     0.00  std::__detail::_NFA<std::__cxx11::regex_traits<char> >::_M_insert_matcher(std::function<bool (char)>)
+  0.00     31.69     0.00        1     0.00     0.00  Board::Board(std::optional<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&) [clone .constprop.0]
+  0.00     31.69     0.00        1     0.00     0.00  std::_Optional_payload_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_M_reset() [clone .part.0] [clone .lto_priv.0]
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2026 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 4 byte(s) for 0.03% of 31.69 seconds
+
+index % time    self  children    called     name
+                             29991386             perft(int, Board&) [clone .part.0] [1]
+                0.04    0.16       1/46          main [13]
+                0.63    2.34      15/46          fast_perft_test(Board&) [7]
+                1.27    4.68      30/46          full_perft_test(Board&) [3]
+[1]     28.7    1.94    7.17      46+29991386 perft(int, Board&) [clone .part.0] [1]
+                4.51    0.00 793103011/793103521     Board::push(Move const&) [5]
+                2.66    0.00 29991432/29991447     Board::generate_legal_moves(StaticVector<Move, 216ull>&, unsigned long long const&, unsigned long long const&) const [clone .constprop.0] [8]
+                             29991386             perft(int, Board&) [clone .part.0] [1]
+-----------------------------------------------
+                                                 <spontaneous>
+[2]     23.1    7.33    0.00                 _mcount_private [2]
+-----------------------------------------------
+                                                 <spontaneous>
+[3]     18.7    0.00    5.94                 full_perft_test(Board&) [3]
+                1.27    4.68      30/46          perft(int, Board&) [clone .part.0] [1]
+                0.00    0.00      30/61          Board::set_fen(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [92]
+-----------------------------------------------
+                                                 <spontaneous>
+[4]     14.5    4.58    0.00                 __fentry__ [4]
+-----------------------------------------------
+                0.00    0.00     510/793103521     fast_measure_push_legal_moves(Board&) [16]
+                4.51    0.00 793103011/793103521     perft(int, Board&) [clone .part.0] [1]
+[5]     14.2    4.51    0.00 793103521         Board::push(Move const&) [5]
+                0.00    0.00 1612479416/2414255860     std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::__cxx11::regex_traits<char> >, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::~_Sp_counted_ptr_inplace() [79]
+-----------------------------------------------
+                                                 <spontaneous>
+[6]     12.4    3.93    0.00                 Baseboard::attackers_mask(bool, int, std::optional<unsigned long long> const&) const [6]
+-----------------------------------------------
+                                                 <spontaneous>
+[7]      9.4    0.00    2.97                 fast_perft_test(Board&) [7]
+                0.63    2.34      15/46          perft(int, Board&) [clone .part.0] [1]
+                0.00    0.00      15/61          Board::set_fen(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [92]
+-----------------------------------------------
+                0.00    0.00      15/29991447     fast_measure_push_legal_moves(Board&) [16]
+                2.66    0.00 29991432/29991447     perft(int, Board&) [clone .part.0] [1]
+[8]      8.4    2.66    0.00 29991447         Board::generate_legal_moves(StaticVector<Move, 216ull>&, unsigned long long const&, unsigned long long const&) const [clone .constprop.0] [8]
+                0.00    0.00 514991102/570422477     std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::__cxx11::regex_traits<char> >, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::_M_get_deleter(std::type_info const&) [80]
+-----------------------------------------------
+                                                 <spontaneous>
+[9]      7.7    2.44    0.00                 Baseboard::_remove_piece_at(int) [9]
+-----------------------------------------------
+                                                 <spontaneous>
+[10]     7.4    2.33    0.00                 Baseboard::_set_piece_at(int, int, bool) [10]
+                0.00    0.00 801775532/2414255860     std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::__cxx11::regex_traits<char> >, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::~_Sp_counted_ptr_inplace() [79]
+-----------------------------------------------
+                                                 <spontaneous>
+[11]     4.8    1.53    0.00                 Baseboard::attacks_mask(int) const [11]
+-----------------------------------------------
+                                                 <spontaneous>
+[12]     1.0    0.33    0.00                 Board::_is_safe(int, unsigned long long const&, int, int) const [12]
+                0.00    0.00 20103809/570422477     std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::__cxx11::regex_traits<char> >, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::_M_get_deleter(std::type_info const&) [80]
+-----------------------------------------------
+                                                 <spontaneous>
+[13]     0.6    0.00    0.20                 main [13]
+                0.04    0.16       1/46          perft(int, Board&) [clone .part.0] [1]
+                0.00    0.00       4/65          __gcc_deregister_frame [90]
+                0.00    0.00       1/62          void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<true>(char const*, unsigned long long) [91]
+                0.00    0.00       1/1           Board::Board(std::optional<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&) [clone .constprop.0] [97]
+                0.00    0.00       1/61          Board::set_fen(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [92]
+                0.00    0.00       1/1           std::_Optional_payload_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_M_reset() [clone .part.0] [clone .lto_priv.0] [98]
+-----------------------------------------------
+                                                 <spontaneous>
+[14]     0.2    0.06    0.00                 Board::_ep_skewered(int, int) const [14]
+                0.00    0.00 30054655/570422477     std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::__cxx11::regex_traits<char> >, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::_M_get_deleter(std::type_info const&) [80]
+-----------------------------------------------
+                                                 <spontaneous>
+[15]     0.2    0.05    0.00                 Board::generate_pseudo_legal_moves(StaticVector<Move, 216ull>&, unsigned long long const&, unsigned long long const&) const [15]
+                0.00    0.00 5264786/570422477     std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::__cxx11::regex_traits<char> >, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::_M_get_deleter(std::type_info const&) [80]
+-----------------------------------------------
+                                                 <spontaneous>
+[16]     0.0    0.00    0.00                 fast_measure_push_legal_moves(Board&) [16]
+                0.00    0.00     510/793103521     Board::push(Move const&) [5]
+                0.00    0.00      15/29991447     Board::generate_legal_moves(StaticVector<Move, 216ull>&, unsigned long long const&, unsigned long long const&) const [clone .constprop.0] [8]
+                0.00    0.00      15/61          Board::set_fen(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [92]
+-----------------------------------------------
+                0.00    0.00     912/2414255860     Baseboard::_set_board_fen(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [110]
+                0.00    0.00 801775532/2414255860     Baseboard::_set_piece_at(int, int, bool) [10]
+                0.00    0.00 1612479416/2414255860     Board::push(Move const&) [5]
+[79]     0.0    0.00    0.00 2414255860         std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::__cxx11::regex_traits<char> >, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::~_Sp_counted_ptr_inplace() [79]
+-----------------------------------------------
+                0.00    0.00      86/570422477     Board::set_fen(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [92]
+                0.00    0.00     176/570422477     std::__detail::_Executor<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::__cxx11::sub_match<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >, std::__cxx11::regex_traits<char>, true>::_M_rep_once_more(std::__detail::_Executor<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::__cxx11::sub_match<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >, std::__cxx11::regex_traits<char>, true>::_Match_mode, long) [243]
+                0.00    0.00     183/570422477     Baseboard::_set_board_fen(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [110]
+                0.00    0.00    2968/570422477     std::__detail::_Executor<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::__cxx11::sub_match<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >, std::__cxx11::regex_traits<char>, true>::_M_dfs(std::__detail::_Executor<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::__cxx11::sub_match<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >, std::__cxx11::regex_traits<char>, true>::_Match_mode, long) [244]
+                0.00    0.00    4712/570422477     bool std::__detail::__regex_algo_impl<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::__cxx11::sub_match<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >, char, std::__cxx11::regex_traits<char> >(__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, __gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::__cxx11::match_results<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::__cxx11::sub_match<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > >&, std::__cxx11::basic_regex<char, std::__cxx11::regex_traits<char> > const&, std::regex_constants::match_flag_type, std::__detail::_RegexExecutorPolicy, bool) [clone .constprop.0] [222]
+                0.00    0.00 5264786/570422477     Board::generate_pseudo_legal_moves(StaticVector<Move, 216ull>&, unsigned long long const&, unsigned long long const&) const [15]
+                0.00    0.00 20103809/570422477     Board::_is_safe(int, unsigned long long const&, int, int) const [12]
+                0.00    0.00 30054655/570422477     Board::_ep_skewered(int, int) const [14]
+                0.00    0.00 514991102/570422477     Board::generate_legal_moves(StaticVector<Move, 216ull>&, unsigned long long const&, unsigned long long const&) const [clone .constprop.0] [8]
+[80]     0.0    0.00    0.00 570422477         std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::__cxx11::regex_traits<char> >, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::_M_get_deleter(std::type_info const&) [80]
+-----------------------------------------------
+                0.00    0.00    2295/2295        std::__detail::_Executor<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::__cxx11::sub_match<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >, std::__cxx11::regex_traits<char>, true>::_M_dfs(std::__detail::_Executor<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::__cxx11::sub_match<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >, std::__cxx11::regex_traits<char>, true>::_Match_mode, long) [244]
+[81]     0.0    0.00    0.00    2295         std::_Function_handler<bool (char), std::__detail::_CharMatcher<std::__cxx11::regex_traits<char>, false, false> >::_M_invoke(std::_Any_data const&, char&&) [81]
+-----------------------------------------------
+                0.00    0.00    2209/2209        Baseboard::_set_board_fen(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [110]
+[82]     0.0    0.00    0.00    2209         std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::push_back(char) [82]
+-----------------------------------------------
+                0.00    0.00      61/488         std::__detail::_Compiler<std::__cxx11::regex_traits<char> >::_M_try_char() [84]
+                0.00    0.00      61/488         std::__cxx11::basic_regex<char, std::__cxx11::regex_traits<char> >::_M_compile(char const*, char const*, std::regex_constants::syntax_option_type) [clone .constprop.0] [94]
+                0.00    0.00     366/488         Board::set_fen(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [92]
+[83]     0.0    0.00    0.00     488         std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_assign(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [83]
+-----------------------------------------------
+                0.00    0.00      61/427         std::__detail::_Compiler<std::__cxx11::regex_traits<char> >::_M_disjunction() [232]
+                0.00    0.00      61/427         std::__cxx11::basic_regex<char, std::__cxx11::regex_traits<char> >::_M_compile(char const*, char const*, std::regex_constants::syntax_option_type) [clone .constprop.0] [94]
+                0.00    0.00     122/427         std::__detail::_Compiler<std::__cxx11::regex_traits<char> >::_M_atom() [238]
+                0.00    0.00     183/427         std::__detail::_Compiler<std::__cxx11::regex_traits<char> >::_M_alternative() [231]
+[84]     0.0    0.00    0.00     427         std::__detail::_Compiler<std::__cxx11::regex_traits<char> >::_M_try_char() [84]
+                0.00    0.00      61/488         std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_assign(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [83]
+                0.00    0.00      61/183         std::__detail::_Scanner<char>::_M_advance() [87]
+-----------------------------------------------
+                0.00    0.00      61/244         std::__detail::_Compiler<std::__cxx11::regex_traits<char> >::_M_alternative() [231]
+                0.00    0.00     183/244         std::__cxx11::basic_regex<char, std::__cxx11::regex_traits<char> >::_M_compile(char const*, char const*, std::regex_constants::syntax_option_type) [clone .constprop.0] [94]
+[85]     0.0    0.00    0.00     244         bool std::operator==<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*) [85]
+-----------------------------------------------
+                0.00    0.00      61/183         Baseboard::_set_board_fen(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [110]
+                0.00    0.00     122/183         Board::set_fen(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [92]
+[86]     0.0    0.00    0.00     183         std::__detail::_State<char>::~_State() [clone .part.0] [clone .lto_priv.0] [86]
+-----------------------------------------------
+                0.00    0.00      61/183         std::__detail::_Compiler<std::__cxx11::regex_traits<char> >::_M_try_char() [84]
+                0.00    0.00     122/183         std::__cxx11::basic_regex<char, std::__cxx11::regex_traits<char> >::_M_compile(char const*, char const*, std::regex_constants::syntax_option_type) [clone .constprop.0] [94]
+[87]     0.0    0.00    0.00     183         std::__detail::_Scanner<char>::_M_advance() [87]
+-----------------------------------------------
+                0.00    0.00     154/154         std::__detail::_Executor<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::__cxx11::sub_match<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >, std::__cxx11::regex_traits<char>, true>::_M_dfs(std::__detail::_Executor<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::__cxx11::sub_match<__gnu_cxx::__normal_iterator<char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >, std::__cxx11::regex_traits<char>, true>::_Match_mode, long) [244]
+[88]     0.0    0.00    0.00     154         std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::__cxx11::regex_traits<char>, false, false> >::_M_invoke(std::_Any_data const&, char&&) [88]
+-----------------------------------------------
+                0.00    0.00      61/122         std::__detail::_Compiler<std::__cxx11::regex_traits<char> >::_M_atom() [238]
+                0.00    0.00      61/122         std::__detail::_Compiler<std::__cxx11::regex_traits<char> >::_M_alternative() [231]
+[89]     0.0    0.00    0.00     122         std::__detail::_StateSeq<std::__cxx11::regex_traits<char> >& std::deque<std::__detail::_StateSeq<std::__cxx11::regex_traits<char> >, std::allocator<std::__detail::_StateSeq<std::__cxx11::regex_traits<char> > > >::emplace_back<std::__detail::_StateSeq<std::__cxx11::regex_traits<char> > >(std::__detail::_StateSeq<std::__cxx11::regex_traits<char> >&&) [clone .isra.0] [89]
+-----------------------------------------------
+                0.00    0.00       4/65          main [13]
+                0.00    0.00      61/65          std::__cxx11::basic_regex<char, std::__cxx11::regex_traits<char> >::_M_compile(char const*, char const*, std::regex_constants::syntax_option_type) [clone .constprop.0] [94]
+[90]     0.0    0.00    0.00      65         __gcc_deregister_frame [90]
+-----------------------------------------------
+                0.00    0.00       1/62          main [13]
+                0.00    0.00      61/62          Board::set_fen(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [92]
+[91]     0.0    0.00    0.00      62         void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<true>(char const*, unsigned long long) [91]
+-----------------------------------------------
+                0.00    0.00       1/61          main [13]
+                0.00    0.00      15/61          fast_perft_test(Board&) [7]
+                0.00    0.00      15/61          fast_measure_push_legal_moves(Board&) [16]
+                0.00    0.00      30/61          full_perft_test(Board&) [3]
+[92]     0.0    0.00    0.00      61         Board::set_fen(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [92]
+                0.00    0.00     366/488         std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_assign(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [83]
+                0.00    0.00     122/183         std::__detail::_State<char>::~_State() [clone .part.0] [clone .lto_priv.0] [86]
+                0.00    0.00      86/570422477     std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::__cxx11::regex_traits<char> >, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::_M_get_deleter(std::type_info const&) [80]
+                0.00    0.00      61/61          std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) [clone .isra.0] [95]
+                0.00    0.00      61/62          void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<true>(char const*, unsigned long long) [91]
+-----------------------------------------------
+                0.00    0.00      61/61          Baseboard::_set_board_fen(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [110]
+[93]     0.0    0.00    0.00      61         std::_Function_handler<bool (char), std::__detail::_CharMatcher<std::__cxx11::regex_traits<char>, false, false> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [93]
+-----------------------------------------------
+                0.00    0.00      61/61          Baseboard::_set_board_fen(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [110]
+[94]     0.0    0.00    0.00      61         std::__cxx11::basic_regex<char, std::__cxx11::regex_traits<char> >::_M_compile(char const*, char const*, std::regex_constants::syntax_option_type) [clone .constprop.0] [94]
+                0.00    0.00     183/244         bool std::operator==<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*) [85]
+                0.00    0.00     122/183         std::__detail::_Scanner<char>::_M_advance() [87]
+                0.00    0.00      61/427         std::__detail::_Compiler<std::__cxx11::regex_traits<char> >::_M_try_char() [84]
+                0.00    0.00      61/488         std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_assign(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [83]
+                0.00    0.00      61/65          __gcc_deregister_frame [90]
+-----------------------------------------------
+                0.00    0.00      61/61          Board::set_fen(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [92]
+[95]     0.0    0.00    0.00      61         std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) [clone .isra.0] [95]
+-----------------------------------------------
+                0.00    0.00      61/61          std::__detail::_Compiler<std::__cxx11::regex_traits<char> >::_M_atom() [238]
+[96]     0.0    0.00    0.00      61         std::__detail::_NFA<std::__cxx11::regex_traits<char> >::_M_insert_matcher(std::function<bool (char)>) [96]
+-----------------------------------------------
+                0.00    0.00       1/1           main [13]
+[97]     0.0    0.00    0.00       1         Board::Board(std::optional<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&) [clone .constprop.0] [97]
+-----------------------------------------------
+                0.00    0.00       1/1           main [13]
+[98]     0.0    0.00    0.00       1         std::_Optional_payload_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_M_reset() [clone .part.0] [clone .lto_priv.0] [98]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2026 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+   [1] perft(int, Board&) [clone .part.0] [6] Baseboard::attackers_mask(bool, int, std::optional<unsigned long long> const&) const [82] std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::push_back(char)
+   [5] Board::push(Move const&) [93] std::_Function_handler<bool (char), std::__detail::_CharMatcher<std::__cxx11::regex_traits<char>, false, false> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) [95] std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) [clone .isra.0]
+  [92] Board::set_fen(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) [81] std::_Function_handler<bool (char), std::__detail::_CharMatcher<std::__cxx11::regex_traits<char>, false, false> >::_M_invoke(std::_Any_data const&, char&&) [96] std::__detail::_NFA<std::__cxx11::regex_traits<char> >::_M_insert_matcher(std::function<bool (char)>)
+  [97] Board::Board(std::optional<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > const&) [clone .constprop.0] [88] std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::__cxx11::regex_traits<char>, false, false> >::_M_invoke(std::_Any_data const&, char&&) [86] std::__detail::_State<char>::~_State() [clone .part.0] [clone .lto_priv.0]
+  [10] Baseboard::_set_piece_at(int, int, bool) [98] std::_Optional_payload_base<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >::_M_reset() [clone .part.0] [clone .lto_priv.0] [87] std::__detail::_Scanner<char>::_M_advance()
+   [9] Baseboard::_remove_piece_at(int) [80] std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::__cxx11::regex_traits<char> >, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::_M_get_deleter(std::type_info const&) [84] std::__detail::_Compiler<std::__cxx11::regex_traits<char> >::_M_try_char()
+  [14] Board::_ep_skewered(int, int) const [79] std::_Sp_counted_ptr_inplace<std::__detail::_NFA<std::__cxx11::regex_traits<char> >, std::allocator<void>, (__gnu_cxx::_Lock_policy)2>::~_Sp_counted_ptr_inplace() [85] bool std::operator==<char, std::char_traits<char>, std::allocator<char> >(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*)
+   [8] Board::generate_legal_moves(StaticVector<Move, 216ull>&, unsigned long long const&, unsigned long long const&) const [clone .constprop.0] [89] std::__detail::_StateSeq<std::__cxx11::regex_traits<char> >& std::deque<std::__detail::_StateSeq<std::__cxx11::regex_traits<char> >, std::allocator<std::__detail::_StateSeq<std::__cxx11::regex_traits<char> > > >::emplace_back<std::__detail::_StateSeq<std::__cxx11::regex_traits<char> > >(std::__detail::_StateSeq<std::__cxx11::regex_traits<char> >&&) [clone .isra.0] [4] __fentry__
+  [15] Board::generate_pseudo_legal_moves(StaticVector<Move, 216ull>&, unsigned long long const&, unsigned long long const&) const [94] std::__cxx11::basic_regex<char, std::__cxx11::regex_traits<char> >::_M_compile(char const*, char const*, std::regex_constants::syntax_option_type) [clone .constprop.0] [90] __gcc_deregister_frame
+  [12] Board::_is_safe(int, unsigned long long const&, int, int) const [91] void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<true>(char const*, unsigned long long) [2] _mcount_private
+  [11] Baseboard::attacks_mask(int) const [83] std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_assign(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
