@@ -521,7 +521,7 @@ Move::operator std::string() const {
 }
 
 Move::operator bool() const {
-    return from_square != 0 || to_square != 0;
+    return from_square != NULL_SQUARE || to_square != NULL_SQUARE || promotion != NULL_PIECE;
 }
 
 std::string Move::uci() const {
@@ -554,7 +554,7 @@ Move Move::null() {
     forfeits en passant capturing). Null moves evaluate to ``False`` in
     boolean contexts.
     */
-    return Move(0, 0);
+    return Move(NULL_SQUARE, NULL_SQUARE, NULL_PIECE);
 }
 
 Move Move::from_uci(const std::string& uci) {
@@ -2964,6 +2964,59 @@ bool Board::has_legal_en_passant() const {
     StaticVector<Move, EP_CAPTURE_SIZE> legal_ep;
     this->generate_legal_ep(legal_ep);
     return this->ep_square != NULL_SQUARE && std::any_of(legal_ep.begin(), legal_ep.end(), [](const Move& move) { return static_cast<bool>(move); });
+}
+
+std::string Board::fen() const {
+    /*
+    Gets the FEN of the current position.
+    */
+    std::string fen;
+    fen.reserve(128);
+
+    // Board part
+    for (int rank = 7; rank >= 0; rank--) {
+        int empty_count = 0;
+        for (int file = 0; file < 8; file++) {
+            Square square = rank * 8 + file;
+            std::optional<Piece> piece = piece_at(square);
+            if (!piece.has_value()) {
+                empty_count++;
+            } else {
+                if (empty_count > 0) {
+                    fen += std::to_string(empty_count);
+                    empty_count = 0;
+                }
+                char piece_char = PIECE_SYMBOLS[piece->piece_type];
+                fen += piece->color ? std::toupper(piece_char) : piece_char;
+            }
+        }
+        if (empty_count > 0)
+            fen += std::to_string(empty_count);
+        if (rank > 0)
+            fen += '/';
+    }
+
+    // Active color
+    fen += ' ';
+    fen += this->turn ? 'w' : 'b';
+
+    // Castling rights
+    fen += ' ';
+    fen += castling_shredder_fen();
+
+    // En passant square
+    fen += ' ';
+    fen += ep_square != NULL_SQUARE ? SQUARE_NAMES[ep_square] : std::string("-");
+
+    // Halfmove clock
+    fen += ' ';
+    fen += std::to_string(halfmove_clock);
+
+    // Fullmove number
+    fen += ' ';
+    fen += std::to_string(fullmove_number);
+
+    return fen;
 }
 
 void Board::set_fen(const std::string& fen) {

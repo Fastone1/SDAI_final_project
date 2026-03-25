@@ -525,6 +525,12 @@ public:
 
     Piece(const Piece& other) : piece_type(other.piece_type), color(other.color) {}
 
+    Piece& operator=(const Piece& other) {
+        piece_type = other.piece_type;
+        color = other.color;
+        return *this;
+    }
+
     std::string symbol() const;
 
     std::string unicode_symbol(const bool& invert_colors = false) const;
@@ -1056,7 +1062,7 @@ public:
     BoardStateTuple(Bitboard p, Bitboard n, Bitboard b, Bitboard r, Bitboard q, Bitboard k,
                     Bitboard ow, Bitboard ob, Color t, Bitboard cr, Square ep) :
         pawns(p), knights(n), bishops(b), rooks(r), queens(q), kings(k),
-        occupied_white(ow), occupied_black(ob), turn(t), castling_rights(cr), ep_square(ep) {};
+        occupied_white(ow), occupied_black(ob), castling_rights(cr), ep_square(ep), turn(t) {};
 
     bool operator==(const BoardStateTuple& other) const {
         return pawns == other.pawns &&
@@ -1151,9 +1157,10 @@ public:
 
     Board(const std::optional<std::string>& fen = STARTING_FEN);
 
-    Board(const Board& other) : Baseboard(other), turn(other.turn), castling_rights(other.castling_rights),
-        ep_square(other.ep_square), fullmove_number(other.fullmove_number), halfmove_clock(other.halfmove_clock),
-        move_stack(other.move_stack), _stack(other._stack) {}
+    Board(const Board& other) : Baseboard(other), _stack(other._stack),
+        move_stack(other.move_stack), castling_rights(other.castling_rights),
+        fullmove_number(other.fullmove_number), halfmove_clock(other.halfmove_clock),
+        ep_square(other.ep_square), turn(other.turn) {}
 
     Board(const Baseboard& other);
 
@@ -1410,8 +1417,8 @@ public:
     // Checks if there is a legal en passant capture.
     bool has_legal_en_passant() const;
 
-    // TODO
-    std::string fen(bool = false, EnPassantSpec = EnPassantSpec::legal, std::optional<bool> = std::nullopt) const {return "";};
+    // Gets the FEN of the current position
+    std::string fen() const;
 
     // TODO
     std::string shredder_fen(EnPassantSpec = EnPassantSpec::legal, std::optional<bool> = std::nullopt) const {return "";};

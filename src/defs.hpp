@@ -4,8 +4,7 @@
 // general parameters for the chess engine
 #define INF_BOUND 22000
 #define MATE_SCORE 20000
-#define MAX_TIME_PER_MOVE 1.0
-#define MAX_DEPTH 64
+#define MAX_DEPTH 32
 #define MAX_EXTENSION 16
 #define INITIAL_ASP 50
 #define MAX_ASP_RETRIES 6
@@ -14,6 +13,10 @@
 #define NUM_THREADS 16
 #define IS_MATE (MATE_SCORE - MAX_DEPTH)
 #define is_mate_score(score) (score > IS_MATE || score < -IS_MATE)
+
+#ifndef MAX_TIME_PER_MOVE
+#define MAX_TIME_PER_MOVE 5
+#endif
 
 // functions and precomputed tables for evaluation
 constexpr inline int ply_to_mate_from_score(int score) {
