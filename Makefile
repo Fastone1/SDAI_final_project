@@ -5,7 +5,7 @@ CXX = g++
 CXXFLAGS = -Wall -Wextra -std=c++20 -Isrc
 LDFLAGS =
 DEPFLAGS = -MMD -MP
-RELEASE_FLAGS = -O3 -flto
+RELEASE_FLAGS = -O3 -flto -march=native
 BASE_BUILD_DIR = build
 MODE ?= default
 SRCS = $(wildcard src/*.cpp)
