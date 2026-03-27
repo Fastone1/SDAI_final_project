@@ -2936,6 +2936,7 @@ std::string Board::castling_shredder_fen() const {
         return "-";
 
     std::vector<std::string> builder;
+    builder.reserve(4);
 
     StaticVector<Square, 64> squares;
     scan_forward(castling_rights & BB_RANK_1, squares);
@@ -2950,6 +2951,42 @@ std::string Board::castling_shredder_fen() const {
         builder.push_back(FILE_NAMES[square_file(square)]);
 
     return accumulate(builder.begin(), builder.end(), std::string());
+}
+
+std::string Board::castling_xfen() const {
+    std::vector<std::string> builder;
+    builder.reserve(4);
+
+    for (Color color : COLORS) {
+        Square king = this->king(color);
+        if (king == NULL_SQUARE)
+            continue;
+
+        int king_file = square_file(king);
+        Bitboard backrank = color ? BB_RANK_1 : BB_RANK_8;
+
+        StaticVector<Square, 64> squares;
+        scan_forward(castling_rights & backrank, squares);
+        for (Square rook_square : squares) {
+            int rook_file = square_file(rook_square);
+            bool a_side = rook_file < king_file;
+            
+            Bitboard other_rooks = occupied_co[color] & rooks & backrank & ~BB_SQUARES[rook_square];
+            
+            char ch;
+            StaticVector<Square, 64> other_rook_squares;
+            scan_forward(other_rooks, other_rook_squares);
+            if (std::any_of(other_rook_squares.begin(), other_rook_squares.end(), [rook_file, a_side](Square square) { return (square_file(square) < rook_file) == a_side; })) {
+                ch = FILE_NAMES[rook_file][0];
+            } else {
+                ch = a_side ? 'q' : 'k';
+            }
+
+            builder.push_back(color ? std::string(1, std::toupper(ch)) : std::string(1, ch));
+        }
+    }
+
+    return builder.empty() ? "-" : accumulate(builder.begin(), builder.end(), std::string());
 }
 
 bool Board::has_pseudo_legal_en_passant() const {
@@ -3002,7 +3039,7 @@ std::string Board::fen() const {
 
     // Castling rights
     fen += ' ';
-    fen += castling_shredder_fen();
+    fen += castling_xfen();
 
     // En passant square
     fen += ' ';

@@ -1408,8 +1408,7 @@ public:
 
     std::string castling_shredder_fen() const;
 
-    // TODO
-    std::string castling_xfen() const {return "";};
+    std::string castling_xfen() const;
 
     // Checks if there is a pseudo-legal en passant capture.
     bool has_pseudo_legal_en_passant() const;

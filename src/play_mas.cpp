@@ -2,21 +2,34 @@
 #include <iostream>
 
 int main() {
-    // Test code for the agents
-    Color color_bot = WHITE; // Change to BLACK to test as Black
+    std::string divider = "\n========================================\n";
+    Color color_bot = WHITE;
+
+    std::cout << divider << "Welcome to the Chess MAS!" << divider;
+    std::cout << "Please choose your color (w for White, b for Black): ";
+    char color_choice;
+    std::cin >> color_choice;
+
+    if (color_choice == 'w' || color_choice == 'W') {
+        color_bot = BLACK;
+    } else if (color_choice != 'b' && color_choice != 'B') {
+        std::cout << "Invalid choice. Defaulting to Black.\n";
+    }
+
     std::string starting_fen = STARTING_FEN;
     std::shared_ptr<Agents::Environment> env = std::make_shared<Agents::Environment>(starting_fen);
     Agents::MAS* agent = new Agents::MAS(env, starting_fen, color_bot);
     
-    std::cout << "Starting game. You are playing as " << (color_bot == WHITE ? "White" : "Black") << ".\n";
+    std::cout << "\nStarting game. You are playing as " << (color_bot == WHITE ? "Black" : "White") << ".\n";
 
     agent->start();
 
     unsigned int move_count = 0;
     while (!env->is_game_over()) {
-        std::cout << "Current Board:\n" << std::string(env->get_board()) << "\n";
-        std::cout << "It's " << (env->get_turn() == WHITE ? "White" : "Black") << "'s turn.\n";
-        if (env->get_turn() == color_bot) {
+        Board current_board = env->get_board();
+        std::cout << divider << "Current Board:\n" << std::string(current_board) << "\n";
+        std::cout << "It's " << (current_board.turn == WHITE ? "White" : "Black") << "'s turn.\n";
+        if (current_board.turn == color_bot) {
             // Manager will decide the move and make it on the board
             env->wait_for_move(move_count); // Wait for the Manager to make a move
         } else {
@@ -34,7 +47,7 @@ int main() {
                 continue;
             }
             try {
-                Move user_move = env->get_board().parse_uci(user_input);
+                Move user_move = current_board.parse_uci(user_input);
                 env->make_move(user_move, move_count);
             } catch (const InvalidMoveError& e) {
                 std::cerr << e.what() << "\n";
@@ -51,8 +64,8 @@ int main() {
             }
         }
     }
-    std::cout << "Game over! Result: " << env->get_board().result() << "\n";
-    std::cout << "Final Board:\n" << std::string(env->get_board()) << "\n";
+    std::cout << divider << "Game over! Result: " << env->get_board().result() << "\n";
+    std::cout << "Final Board:\n" << std::string(env->get_board()) << "\n" << divider;
 
     delete agent;
 
