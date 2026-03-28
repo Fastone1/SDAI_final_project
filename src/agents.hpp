@@ -184,109 +184,7 @@ namespace Agents {
         virtual void start() = 0;
         virtual void stop() = 0;
     };
-
-    class SearcherAgent : public Agent {
-    public:
-        Array2D<Move, MAX_DEPTH + MAX_EXTENSION, 2> killer_moves;
-        Array2D<int, 64, 64> history[2];
-        Board board;
-        TranspositionTable transposition_table;
-
-        std::thread search_thread;
-        std::thread comm_thread;
-
-        Move updated_move = Move::null();
-        unsigned int move_count = 0; 
-        std::atomic<bool> should_pause{false};
-        
-        SearcherAgent(AgentProfile profile, std::shared_ptr<Environment> env, std::shared_ptr<Comms> comms, const std::optional<std::string>& fen = std::nullopt, Color color = WHITE)
-            :  Agent(AgentType::Searcher, profile, env, comms, color), // Default color, adjust as needed
-                killer_moves(), history{Array2D<int, 64, 64>(), Array2D<int, 64, 64>()},
-                board(fen), transposition_table(), search_thread(), comm_thread() {
-            // Initialize killer moves and history
-            for (int i = 0; i < MAX_DEPTH + MAX_EXTENSION; ++i) {
-                killer_moves.insert(i, 0, Move::null());
-                killer_moves.insert(i, 1, Move::null());
-            }
-            for (int i = 0; i < 2; ++i) {
-                for (int j = 0; j < 64; ++j) {
-                    for (int k = 0; k < 64; ++k) {
-                        history[i].insert(j, k, 0);
-                    }
-                }
-            }
-        }
-
-        ~SearcherAgent() {
-            stop();
-        }
-
-        void update_proposal(const Move& move, int score_cp, int depth_reached) {
-            int idx = static_cast<int>(profile);
-            comms->update_proposal(idx, move, score_cp, depth_reached);
-        }
-
-        void search() {
-            while (!env->should_stop.load(std::memory_order_acquire) && !board.is_game_over()) {
-                //printf("Searcher Agent (%s, %d) starting new search iteration. Move count: %u\n", profile_names[static_cast<int>(profile)].c_str(), id, move_count);
-                // Perform search and update proposal
-                this->get_move();
-                // Check for move updates
-                if (static_cast<bool>(updated_move)) {
-                    board.push(updated_move); // Update the board with the new move
-                    updated_move = Move::null(); // Reset the updated move
-                    should_pause.store(false, std::memory_order_release); // Reset pause flag for next search
-                }
-            }
-        }
-
-        void comms_loop() {
-            while (!env->should_stop.load(std::memory_order_acquire)) {
-                // Wait for move updates from the Manager
-                updated_move = env->wait_for_move(move_count);
-
-                // Search thread should pause
-                should_pause.store(true, std::memory_order_release);
-            }
-        }
-
-        void start() {
-            should_pause.store(false, std::memory_order_release);
-            search_thread = std::thread(&SearcherAgent::search, this);
-            comm_thread = std::thread(&SearcherAgent::comms_loop, this);
-        }
-
-        void stop() {
-            should_pause.store(true, std::memory_order_release);
-            if (comm_thread.joinable()) {
-                comm_thread.join();
-            }
-            if (search_thread.joinable()) {
-                search_thread.join();
-            }
-        };
-        
-    private:
-        int mvv_lva_score(const Move& move);
-
-        void order_moves(StaticVector<Move, LEGAL_MOVES_SIZE>& moves, const Move& first_move = Move::null(), int ply = -1);
-
-        std::optional<int> quiesce(int alpha, int beta, int q_depth = 6);
-
-        std::optional<int> negamax(int depth, int alpha, int beta, int numExtensions = 0, int ply = 1, bool can_null = true);
-
-        Result root_move(int depth, int alpha = -MATE_SCORE, int beta = MATE_SCORE, const Move& ex_best_move = Move::null());
-
-        void get_move();
-
-        inline void age_history();
-
-    protected:
-        virtual int evaluate() const = 0; 
-
-        int mopup_eval(int eg_eval) const;
-    };
-
+    
     class ManagerAgent : public Agent {
     public:
         struct MoveHash {
@@ -530,6 +428,108 @@ namespace Agents {
         }
     };
 
+    class SearcherAgent : public Agent {
+    public:
+        Array2D<Move, MAX_DEPTH + MAX_EXTENSION, 2> killer_moves;
+        Array2D<int, 64, 64> history[2];
+        Board board;
+        TranspositionTable transposition_table;
+
+        std::thread search_thread;
+        std::thread comm_thread;
+
+        Move updated_move = Move::null();
+        unsigned int move_count = 0; 
+        std::atomic<bool> should_pause{false};
+        
+        SearcherAgent(AgentProfile profile, std::shared_ptr<Environment> env, std::shared_ptr<Comms> comms, const std::optional<std::string>& fen = std::nullopt, Color color = WHITE)
+            :  Agent(AgentType::Searcher, profile, env, comms, color), // Default color, adjust as needed
+                killer_moves(), history{Array2D<int, 64, 64>(), Array2D<int, 64, 64>()},
+                board(fen), transposition_table(), search_thread(), comm_thread() {
+            // Initialize killer moves and history
+            for (int i = 0; i < MAX_DEPTH + MAX_EXTENSION; ++i) {
+                killer_moves.insert(i, 0, Move::null());
+                killer_moves.insert(i, 1, Move::null());
+            }
+            for (int i = 0; i < 2; ++i) {
+                for (int j = 0; j < 64; ++j) {
+                    for (int k = 0; k < 64; ++k) {
+                        history[i].insert(j, k, 0);
+                    }
+                }
+            }
+        }
+
+        ~SearcherAgent() {
+            stop();
+        }
+
+        void update_proposal(const Move& move, int score_cp, int depth_reached) {
+            int idx = static_cast<int>(profile);
+            comms->update_proposal(idx, move, score_cp, depth_reached);
+        }
+
+        void search() {
+            while (!env->should_stop.load(std::memory_order_acquire) && !board.is_game_over()) {
+                //printf("Searcher Agent (%s, %d) starting new search iteration. Move count: %u\n", profile_names[static_cast<int>(profile)].c_str(), id, move_count);
+                // Perform search and update proposal
+                this->get_move();
+                // Check for move updates
+                if (static_cast<bool>(updated_move)) {
+                    board.push(updated_move); // Update the board with the new move
+                    updated_move = Move::null(); // Reset the updated move
+                    should_pause.store(false, std::memory_order_release); // Reset pause flag for next search
+                }
+            }
+        }
+
+        void comms_loop() {
+            while (!env->should_stop.load(std::memory_order_acquire)) {
+                // Wait for move updates from the Manager
+                updated_move = env->wait_for_move(move_count);
+
+                // Search thread should pause
+                should_pause.store(true, std::memory_order_release);
+            }
+        }
+
+        void start() {
+            should_pause.store(false, std::memory_order_release);
+            search_thread = std::thread(&SearcherAgent::search, this);
+            comm_thread = std::thread(&SearcherAgent::comms_loop, this);
+        }
+
+        void stop() {
+            should_pause.store(true, std::memory_order_release);
+            if (comm_thread.joinable()) {
+                comm_thread.join();
+            }
+            if (search_thread.joinable()) {
+                search_thread.join();
+            }
+        };
+        
+    private:
+        int mvv_lva_score(const Move& move);
+
+        void order_moves(StaticVector<Move, LEGAL_MOVES_SIZE>& moves, const Move& first_move = Move::null(), int ply = -1);
+
+        std::optional<int> quiesce(int alpha, int beta, int q_depth = 6);
+
+        std::optional<int> negamax(int depth, int alpha, int beta, int numExtensions = 0, int ply = 1, bool can_null = true);
+
+        Result root_move(int depth, int alpha = -MATE_SCORE, int beta = MATE_SCORE, const Move& ex_best_move = Move::null());
+
+        void get_move();
+
+        inline void age_history();
+
+    protected:
+        virtual int evaluate() const = 0; 
+
+        int mopup_eval(int eg_eval) const;
+    };
+
     class EarlyGameAgent : public SearcherAgent {
     public:
         EarlyGameAgent(std::shared_ptr<Environment> env, std::shared_ptr<Comms> comms, const std::optional<std::string>& fen = std::nullopt, Color color = WHITE)
@@ -541,10 +541,11 @@ namespace Agents {
                   this->board.material_eg[!this->board.turn] - this->board.pawns_eg[!this->board.turn];
 
             // Penalize undeveloped pieces (e.g., pieces still on their original squares)
-            if (board.pieces_mask(KNIGHT, color) & 0x0000000000000042ULL) {
+            Bitboard starting_squares = color == WHITE ? BB_RANK_1 : BB_RANK_8;
+            if (board.pieces_mask(KNIGHT, color) & starting_squares & BB_B1 & BB_G1 & BB_B8 & BB_G8) {
                 score -= 20; // Penalize knights on original squares
             }
-            if (board.pieces_mask(BISHOP, color) & 0x0000000000000024ULL) {
+            if (board.pieces_mask(BISHOP, color) & starting_squares & BB_C1 & BB_F1 & BB_C8 & BB_F8) {
                 score -= 20; // Penalize bishops on original squares
             }
 
@@ -566,6 +567,27 @@ namespace Agents {
             score += this->mopup_eval(score);
 
             return score;
+        }
+    };
+
+    class MidGameAgent : public SearcherAgent {
+    public:
+        MidGameAgent(std::shared_ptr<Environment> env, std::shared_ptr<Comms> comms, const std::optional<std::string>& fen = std::nullopt, Color color = WHITE)
+            : SearcherAgent(AgentProfile::Middlegame, env, comms, fen, color) {}
+
+    protected:
+         int evaluate() const override {
+            int mg_score = this->board.material_mg[this->board.turn] + this->board.pawns_mg[this->board.turn] -
+                  this->board.material_mg[!this->board.turn] - this->board.pawns_mg[!this->board.turn];
+
+            int eg_score = this->board.material_eg[this->board.turn] + this->board.pawns_eg[this->board.turn] -
+                  this->board.material_eg[!this->board.turn] - this->board.pawns_eg[!this->board.turn];
+
+                  
+            int mg_phase = std::min(24, this->board.game_phase);
+            int eg_phase = 24 - mg_phase;
+
+            return (mg_score * mg_phase + eg_score * eg_phase) / 24;
         }
     };
 
@@ -591,24 +613,21 @@ namespace Agents {
                 eg_score += this->mopup_eval(eg_score);
             }
 
+            // Mobility bonus in the midgame
+            StaticVector<Move, LEGAL_MOVES_SIZE> legal_moves;
+            this->board.generate_legal_moves(legal_moves);
+            int turn_legal_moves_size = legal_moves.size();
+            this->board.generate_legal_moves_by_color(legal_moves, !this->board.turn);
+            mg_score += (turn_legal_moves_size - legal_moves.size()) * 7;
+
+            // Combine midgame and endgame scores based on the game phase
             return (mg_score * mg_phase + eg_score * eg_phase) / 24;
         }
     };
 
-    class MidGameAgent : public SearcherAgent {
-    public:
-        MidGameAgent(std::shared_ptr<Environment> env, std::shared_ptr<Comms> comms, const std::optional<std::string>& fen = std::nullopt, Color color = WHITE)
-            : SearcherAgent(AgentProfile::Middlegame, env, comms, fen, color) {}
-
-    protected:
-         int evaluate() const override {
-            int score = this->board.material_mg[this->board.turn] + this->board.pawns_mg[this->board.turn] -
-                  this->board.material_mg[!this->board.turn] - this->board.pawns_mg[!this->board.turn];
-
-            return score;
-        }
-    };
-
+    /*
+    MAS class to manage the Agents (one Manager, multiple Searchers) and interact with the Environment.
+    */
     class MAS {
         private:
             std::shared_ptr<Environment> env;
