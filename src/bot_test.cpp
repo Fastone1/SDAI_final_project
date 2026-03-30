@@ -4,7 +4,6 @@
 
 int main() {
     std::string divider = "\n========================================\n";
-    Color color_mas = WHITE;
 
     std::array<int, 3> wins = {0, 0, 0}; // MAS wins, Bot wins, Draws
     std::array<std::array<double, 4>, 100> trust_history; // Store trust values for each game
