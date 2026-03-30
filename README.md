@@ -4,6 +4,7 @@ This repository contains the implementation of a MAS chess engine for the final 
 ## Features
 - A chess engine that can play against a human opponent.
 - Perft tests to validate the correctness of move generation.
+- A bot test that pits the MAS against a simple chess bot for 100 games, tracking wins, losses, draws, and trust values of the agents.
 - A Makefile to build and run the project.
 
 ## Building and Running
@@ -52,4 +53,6 @@ g++ -o perft_test src/perft_test.cpp src/chess.cpp src/timer.cpp -std=c++20 -Isr
 ## Project Structure
 - `src/`: Contains the source code for the chess engine and perft tests.
 - `build/`: The directory where compiled object files and executables are stored.
+- `books/`: Contains the opening book files used by the chess engine.
 - `Makefile`: The build script for compiling and running the project.
+- `README.md`: This file, containing instructions and information about the project.
