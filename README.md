@@ -7,19 +7,6 @@ This repository contains the implementation of a MAS chess engine for the final 
 - A Makefile to build and run the project.
 
 ## Building and Running
-To build the project, simply run:
-```bash
-make
-```
-This will compile the chess engine and the perft test. You can then run the chess engine with:
-```bash
-make run-play-mas
-```
-And run the perft tests with:
-```bash
-make run-perft
-```
-
 To run the chess engine, you need to have a C++ compiler and the necessary libraries installed on your system. The project uses a Makefile to manage the build process, so you can simply run the following command in the terminal:
 ```bash
 make
