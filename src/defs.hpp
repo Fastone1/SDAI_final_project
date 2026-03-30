@@ -15,7 +15,7 @@
 #define is_mate_score(score) (score > IS_MATE || score < -IS_MATE)
 
 #ifndef MAX_TIME_PER_MOVE
-#define MAX_TIME_PER_MOVE 5
+#define MAX_TIME_PER_MOVE 1
 #endif
 
 // functions and precomputed tables for evaluation

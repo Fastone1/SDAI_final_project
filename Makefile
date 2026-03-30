@@ -1,4 +1,4 @@
-.PHONY: all clean build play_mas perft_test run run-play-mas run-perft debug release run-debug run-release run-perft-debug run-perft-release help
+.PHONY: all clean build play_mas perft_test bot_test run run-play-mas run-perft run-bot-test debug release run-debug run-release run-perft-debug run-perft-release run-bot-test-debug run-bot-test-release help
 
 # Variables
 CXX = g++
@@ -32,33 +32,40 @@ EFFECTIVE_LDFLAGS = $(LDFLAGS)
 OTHER_MAIN_SRCS =
 PLAY_MAS_SRC = src/play_mas.cpp
 PERFT_TEST_SRC = src/perft_test.cpp
+BOT_TEST_SRC = src/bot_test.cpp
 
-LIB_SRCS = $(filter-out $(PLAY_MAS_SRC) $(PERFT_TEST_SRC) $(OTHER_MAIN_SRCS),$(SRCS))
+LIB_SRCS = $(filter-out $(PLAY_MAS_SRC) $(PERFT_TEST_SRC) $(BOT_TEST_SRC) $(OTHER_MAIN_SRCS),$(SRCS))
 
 LIB_OBJS = $(patsubst src/%.cpp,$(OUT_DIR)/%.o,$(LIB_SRCS))
 PLAY_MAS_OBJ = $(patsubst src/%.cpp,$(OUT_DIR)/%.o,$(PLAY_MAS_SRC))
 PERFT_TEST_OBJ = $(patsubst src/%.cpp,$(OUT_DIR)/%.o,$(PERFT_TEST_SRC))
-
+BOT_TEST_OBJ = $(patsubst src/%.cpp,$(OUT_DIR)/%.o,$(BOT_TEST_SRC))
 PLAY_MAS_TARGET = $(OUT_DIR)/play_mas
 PERFT_TEST_TARGET = $(OUT_DIR)/perft_test
+BOT_TEST_TARGET = $(OUT_DIR)/bot_test
 BUILD_STAMP = $(OUT_DIR)/.dir-stamp
 
-DEPS = $(LIB_OBJS:.o=.d) $(PLAY_MAS_OBJ:.o=.d) $(PERFT_TEST_OBJ:.o=.d)
+DEPS = $(LIB_OBJS:.o=.d) $(PLAY_MAS_OBJ:.o=.d) $(PERFT_TEST_OBJ:.o=.d) $(BOT_TEST_OBJ:.o=.d)
 
 # Default target
-all: build
+all: build release debug
 
 # Build target
-build: play_mas perft_test
+build: play_mas perft_test bot_test
 
 play_mas: $(PLAY_MAS_TARGET)
 
 perft_test: $(PERFT_TEST_TARGET)
 
+bot_test: $(BOT_TEST_TARGET)
+
 $(PLAY_MAS_TARGET): $(LIB_OBJS) $(PLAY_MAS_OBJ) | $(BUILD_STAMP)
 	$(CXX) $(EFFECTIVE_CXXFLAGS) -o $@ $^ $(EFFECTIVE_LDFLAGS)
 
 $(PERFT_TEST_TARGET): $(LIB_OBJS) $(PERFT_TEST_OBJ) | $(BUILD_STAMP)
+	$(CXX) $(EFFECTIVE_CXXFLAGS) -o $@ $^ $(EFFECTIVE_LDFLAGS)
+
+$(BOT_TEST_TARGET): $(LIB_OBJS) $(BOT_TEST_OBJ) | $(BUILD_STAMP)
 	$(CXX) $(EFFECTIVE_CXXFLAGS) -o $@ $^ $(EFFECTIVE_LDFLAGS)
 
 $(OUT_DIR)/%.o: src/%.cpp | $(BUILD_STAMP)
@@ -76,6 +83,9 @@ run-play-mas: play_mas
 
 run-perft: perft_test
 	./$(PERFT_TEST_TARGET)
+
+run-bot-test: bot_test
+	./$(BOT_TEST_TARGET)
 
 # Debug / release wrapper targets
 debug:
@@ -96,6 +106,12 @@ run-perft-debug:
 run-perft-release:
 	$(MAKE) MODE=release run-perft
 
+run-bot-test-debug:
+	$(MAKE) MODE=debug run-bot-test
+
+run-bot-test-release:
+	$(MAKE) MODE=release run-bot-test
+
 # Clean target
 clean:
 	rm -rf $(BASE_BUILD_DIR)
@@ -103,18 +119,22 @@ clean:
 # Help target
 help:
 	@echo "Available targets:"
-	@echo "  make build        - Compile play_mas and perft_test"
+	@echo "  make build        - Compile play_mas, perft_test and bot_test"
 	@echo "  make play_mas     - Compile play_mas executable"
 	@echo "  make perft_test   - Compile perft_test executable"
+	@echo "  make bot_test     - Compile bot_test executable"
 	@echo "  make run          - Build and run play_mas"
 	@echo "  make run-play-mas - Build and run play_mas"
 	@echo "  make run-perft    - Build and run perft_test"
+	@echo "  make run-bot-test - Build and run bot_test"
 	@echo "  make debug        - Build both targets in debug mode"
 	@echo "  make release      - Build both targets in release mode"
 	@echo "  make run-debug    - Build/run play_mas in debug mode"
 	@echo "  make run-release  - Build/run play_mas in release mode"
 	@echo "  make run-perft-debug   - Build/run perft_test in debug mode"
 	@echo "  make run-perft-release - Build/run perft_test in release mode"
+	@echo "  make run-bot-test-debug   - Build/run bot_test in debug mode"
+	@echo "  make run-bot-test-release - Build/run bot_test in release mode"
 	@echo "  make MODE=debug build  - Build with explicit mode"
 	@echo "  make MODE=release run  - Run play_mas in release mode"
 	@echo "  make clean        - Remove compiled files"

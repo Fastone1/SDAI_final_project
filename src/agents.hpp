@@ -213,7 +213,6 @@ namespace Agents {
         MemoryMappedReader opening_book;
         std::thread manager_thread;
         std::array<double, N_SEARCHERS> trust;
-        unsigned int trust_update_steps = 0;
         
         ManagerAgent(std::shared_ptr<Environment> env, std::shared_ptr<Comms> comms, const Color color = WHITE)
                     : Agent(AgentType::Manager, AgentProfile::Hybrid, env, comms, color), opening_book("books/Titans.bin"), trust{} {
@@ -248,7 +247,6 @@ namespace Agents {
                 const double updated = (1.0 - TRUST_LR) * trust[i] + TRUST_LR * reward;
                 trust[i] = std::clamp(updated, TRUST_MIN, TRUST_MAX);
             }
-            ++trust_update_steps;
         }
         
         Move decide_move() {
@@ -337,10 +335,6 @@ namespace Agents {
                         best_idx = i;
                     }
                 }
-                // We have found a mate score, take it immediately.
-                else if (cand_value >= IS_MATE) {
-                    best_idx = i;
-                }
                 // Otherwise choose by vote table.
                 else if (votes[cand_move] > votes[best_move_current]) {
                     best_idx = i;
@@ -393,7 +387,7 @@ namespace Agents {
                       << " | avg score: " << best_avg_score << "\n";
             std::cout << "Updated trust: ["
                       << trust[0] << ", " << trust[1] << ", " << trust[2] << ", " << trust[3]
-                      << "] step=" << trust_update_steps << "\n";
+                      << "]\n";
 #endif
 
             return best_move;
@@ -662,6 +656,10 @@ namespace Agents {
                 for (auto& searcher : searchers) {
                     searcher->stop();
                 }
+            }
+
+            std::array<double, N_SEARCHERS> get_trust() const {
+                return manager->trust;
             }
     };
 
